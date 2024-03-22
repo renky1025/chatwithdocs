@@ -1,0 +1,7 @@
+data_path: "data/luxun"
+collection_name: "luxun"
+llm_url: "http://localhost:11434"
+llm_name: "qwen"
+embedding_model: "BAAI/bge-large-zh"
+qdrant_url: "http://192.168.1.96:6334"
+chunk_size: 512

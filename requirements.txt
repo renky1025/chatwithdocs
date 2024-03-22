@@ -1,0 +1,18 @@
+langchain
+llama_index
+pydantic
+PyYAML
+qdrant_client
+llama-index-vector-stores-qdrant
+llama-index-llms-ollama
+tqdm
+pypdf
+uvicorn
+fastembed
+spacy
+sentence-transformers
+gradio==3.50.2
+tools
+frontend
+fitz
+#python -m spacy download zh_core_web_sm
