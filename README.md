@@ -1,10 +1,4 @@
-# RAG: Research-assistant
-
-This project aims to help researchers find answers from a set of research papers with the help of a customized RAG pipeline and a powerfull LLM, all offline and free of cost.
-
-## How it works
-
-![Project Architecture](images/local-rag-architecture.png)
+# RAG practice
 
 
 ## Running the project
@@ -18,7 +12,8 @@ docker run -p 6333:6333 -v ~/qdrant_storage:/qdrant/storage:z qdrant/qdrant
 #### Downloading & Indexing data
 
 ```bash
-python rag/data.py --query "LLM" --max 10 --ingest
+llamaIndexApp = my_app()
+llamaIndexApp.process_file()
 ```
 
 #### Starting Ollama LLM server
@@ -29,7 +24,13 @@ Follow [this article](https://otmaneboughaba.com/posts/local-llm-ollama-huggingf
 Start the model server
 
 ```bash
-ollama run research_assistant
+ollama run llama2
 ```
 
 By default, Ollama runs on ```http://localhost:11434```
+
+#### Demo running
+update config.yml first and then
+```bash
+python gradio_app.py
+```
