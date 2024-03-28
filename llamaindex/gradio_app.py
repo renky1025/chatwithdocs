@@ -8,12 +8,16 @@ from llama_index.core import (
     download_loader,
     Prompt,
     Document,
+    PromptHelper,
 )
+from llama_index.core.node_parser import SentenceSplitter
 import yaml
 import qdrant_client
 from llama_index.vector_stores.qdrant import QdrantVectorStore
 from langchain.text_splitter import SpacyTextSplitter
-from langchain.embeddings.huggingface import HuggingFaceEmbeddings
+
+from langchain.embeddings import HuggingFaceEmbeddings
+from llama_index.embeddings.langchain import LangchainEmbedding
 from llama_index.llms.ollama import Ollama
 import logging
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
@@ -26,7 +30,7 @@ class my_app:
         with open(config_file, "r") as conf:
             self.config = yaml.safe_load(conf)
 
-        self.embed_model = HuggingFaceEmbeddings(model_name=self.config["embedding_model"])
+        self.embed_model =  LangchainEmbedding(HuggingFaceEmbeddings(model_name=self.config["embedding_model"]))
         self.llm = Ollama(model=self.config["llm_name"], base_url=self.config["llm_url"], request_timeout=300)
         # max_input_size = 4096
         # num_output = 256
@@ -52,13 +56,24 @@ class my_app:
             loader = PDFReader()
             documents = loader.load_data(file=file)
         else:
-            documents = SimpleDirectoryReader(self.config["data_path"], required_exts=['.pdf']).load_data(show_progress=True)
+            documents = SimpleDirectoryReader(self.config["data_path"], required_exts=['.pdf', '.PDF']).load_data(show_progress=True)
         #documents = SimpleDirectoryReader(self.config["data_path"], required_exts=['.txt']).load_data()
         logging.info(f" docs is a {type(documents)}, of length {len(documents)}, where each element is a {type(documents[0])} object")
         documents_v2 = []
+        #text_splitter = SentenceSplitter(chunk_size=200, chunk_overlap=20)
+        # prompt_helper = PromptHelper(
+        #     context_window=4096,
+        #     num_output=256,
+        #     chunk_overlap_ratio=0.1,
+        #     chunk_size_limit=None,
+        # )
         for doc in documents:
-            docs = text_splitter.split_text(doc.text)
-            documents_v2 += [Document(text=t,metadata= doc.metadata,) for t in docs]
+            if len(doc.text)>0:
+                if len(doc.text)>self.config["chunk_size"]:
+                    docs = text_splitter.split_text(doc.text)
+                    documents_v2 += [Document(text=t,metadata= doc.metadata,) for t in docs]
+                else:
+                    documents_v2+=[doc]
 
         if len(documents_v2) ==0:
             raise Exception("Sorry, no documents were found")
@@ -66,7 +81,7 @@ class my_app:
         storage_context = StorageContext.from_defaults(vector_store=qdrant_vector_store)
         service_context = ServiceContext.from_defaults(
             llm=None,
-            embed_model=self.embedder,
+            embed_model=self.embed_model,
             chunk_size=self.config["chunk_size"]
         )
         ## save the vectors
@@ -135,7 +150,7 @@ def add_text(history, text: str):
 
 def render_file(file):
         doc = fitz.open(file.name)
-        page = doc[0]
+        page = doc[2]
         #Render the page as a PNG image with a resolution of 300 DPI
         pix = page.get_pixmap(matrix=fitz.Matrix(300/72, 300/72))
         image = Image.frombytes('RGB', [pix.width, pix.height], pix.samples)
@@ -143,7 +158,7 @@ def render_file(file):
 
 def render_first(file):
         doc = fitz.open(file.name)
-        page = doc[0]
+        page = doc[2]
         #Render the page as a PNG image with a resolution of 300 DPI
         pix = page.get_pixmap(matrix=fitz.Matrix(300/72, 300/72))
         image = Image.frombytes('RGB', [pix.width, pix.height], pix.samples)
@@ -152,7 +167,7 @@ def render_first(file):
 llamaIndexApp = my_app()
 #get_response("鲁迅写了哪些小说")
 
-llamaIndexApp.process_file()
+#llamaIndexApp.process_file()
 
 import gradio as gr
 with gr.Blocks() as demo:

@@ -1,10 +1,15 @@
+arxiv
+fastapi
 langchain
+langchain-community
 llama_index
+ollama
 pydantic
 PyYAML
 qdrant_client
 llama-index-vector-stores-qdrant
 llama-index-llms-ollama
+llama-index-embeddings-langchain
 tqdm
 pypdf
 uvicorn
@@ -14,5 +19,6 @@ sentence-transformers
 gradio==3.50.2
 tools
 frontend
+pymupdf
 fitz
 #python -m spacy download zh_core_web_sm

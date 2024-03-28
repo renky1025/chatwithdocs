@@ -1,0 +1,11 @@
+#data_path: "D:\\ai-test\\local-rag-llamaindex-qdrant\\data\\financial_research_reports"
+#collection_name: "financial"
+# data_path: "D:\\ai-test\\local-rag-llamaindex-qdrant\\data\\fengshui"
+# collection_name: "fengshui"
+data_path: "D:\\ai-test\\local-rag-llamaindex-qdrant\\data\\luxun"
+collection_name: "luxun"
+llm_url: "http://localhost:11434"
+llm_name: "qwen"
+embedding_model: "BAAI/bge-large-zh"
+qdrant_url: "http://192.168.1.96:6334"
+chunk_size: 512

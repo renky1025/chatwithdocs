@@ -1,0 +1,8 @@
+langchain
+langchain_community
+qdrant_client
+streamlit
+pypdf
+tqdm
+zh_core_web_sm
+beautifulsoup4

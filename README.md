@@ -1,5 +1,6 @@
 # RAG practice
 
+One basic function project, create with LlamaIndex and LangChain framework
 
 ## Running the project
 
@@ -14,6 +15,11 @@ docker run -p 6333:6333 -v ~/qdrant_storage:/qdrant/storage:z qdrant/qdrant
 ```bash
 llamaIndexApp = my_app()
 llamaIndexApp.process_file()
+```
+
+```bash
+    insertData() # prepare data
+    #main()# run app: streamlit run qdrant_app.py
 ```
 
 #### Starting Ollama LLM server
@@ -33,4 +39,8 @@ By default, Ollama runs on ```http://localhost:11434```
 update config.yml first and then
 ```bash
 python gradio_app.py
+```
+or
+```bash
+streamlit run qdrant_app.py
 ```
