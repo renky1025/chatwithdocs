@@ -1,6 +1,8 @@
 # RAG practice
 
 One basic function project, create with LlamaIndex and LangChain framework
+![](images/local-rag-architecture.png)
+![](images/86971A7E-F910-4ad2-BA59-A80EB9D1EB66.png)
 
 ## Running the project
 
@@ -44,3 +46,9 @@ or
 ```bash
 streamlit run qdrant_app.py
 ```
+
+## Example
+
+#### Request
+
+![Post Request](images/912842EB-653C-4085-A1A8-8D8C2E500DEF.png)

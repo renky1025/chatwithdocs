@@ -21,4 +21,7 @@ tools
 frontend
 pymupdf
 fitz
+llama-index-postprocessor-flag-embedding-reranker
+FlagEmbedding
+termcolor
 #python -m spacy download zh_core_web_sm

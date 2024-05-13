@@ -23,6 +23,15 @@ import logging
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
 logging.basicConfig(level=logging.DEBUG, format=LOG_FORMAT)
 
+##pip install llama-index-postprocessor-flag-embedding-reranker,FlagEmbedding , termcolor
+from llama_index.postprocessor.flag_embedding_reranker import FlagEmbeddingReranker
+
+reranker = FlagEmbeddingReranker(
+    top_n=3,
+    model="BAAI/bge-reranker-large",
+    use_fp16=False
+)
+
 class my_app:
     def __init__(self) -> None:
         self.chat_history: list = []
@@ -121,8 +130,10 @@ class my_app:
         QA_PROMPT = Prompt(DEFAULT_TEXT_QA_PROMPT_TMPL)
         #query_engine = index.as_query_engine(text_qa_template=QA_PROMPT, response_mode="tree_summarize")
         query_index = self.qdrant_index()
+        
         query_engine = query_index.as_query_engine(text_qa_template=QA_PROMPT,
-                                                #similarity_top_k=query.similarity_top_k,
+                                                similarity_top_k=5,
+                                                node_postprocessors=[reranker],
                                                 response_mode="tree_summarize",
                                                 )
         response = query_engine.query(query_str)
